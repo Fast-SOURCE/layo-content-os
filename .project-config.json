@@ -1,0 +1,37 @@
+{
+  "build_command": "pnpm run build",
+  "capabilities": [
+    "server",
+    "db",
+    "user"
+  ],
+  "dev_command": "pnpm run dev",
+  "env_vars": {
+    "DATABASE_URL": "mysql://iycB5JKH1nduSMu.root:J92yZ20wyJF38suhPKqZ@gateway06.us-east-1.prod.aws.tidbcloud.com:4000/WUSkBnTeGufWzCNW59kkJq?ssl={\"rejectUnauthorized\":true}"
+  },
+  "experiments": [
+    "no_db_push"
+  ],
+  "git_remote": {},
+  "name": "layo-content-os",
+  "path": "/home/ubuntu/layo-content-os",
+  "port": 3000,
+  "secrets": {
+    "BUILT_IN_FORGE_API_KEY": "4NMtwpbPmGY9jbgLnMeBYt",
+    "BUILT_IN_FORGE_API_URL": "https://forge.manus.ai",
+    "JWT_SECRET": "hCiBXHRBsEdUmyTcu2Ev9b",
+    "OAUTH_SERVER_URL": "https://api.manus.im",
+    "OWNER_NAME": "yblnyicym7",
+    "OWNER_OPEN_ID": "cKWgpPAbwwutFcrmRfJTTS",
+    "VITE_ANALYTICS_ENDPOINT": "https://manus-analytics.com",
+    "VITE_ANALYTICS_WEBSITE_ID": "38271601-9820-4bef-bd25-06ec5b964b49",
+    "VITE_APP_ID": "WUSkBnTeGufWzCNW59kkJq",
+    "VITE_APP_LOGO": "",
+    "VITE_APP_TITLE": "LAYO Content OS",
+    "VITE_FRONTEND_FORGE_API_KEY": "muKK84uFmEfvyLutLr3Qt9",
+    "VITE_FRONTEND_FORGE_API_URL": "https://forge.manus.ai",
+    "VITE_OAUTH_PORTAL_URL": "https://manus.im"
+  },
+  "template_id": "web-db-user",
+  "test_command": "pnpm test"
+}
