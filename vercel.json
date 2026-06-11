@@ -1,19 +1,17 @@
 {
   "version": 2,
-  "installCommand": "corepack enable && corepack use pnpm@10 && pnpm install --no-frozen-lockfile",
-  "builds": [
-    {
-      "src": "api/index.js",
-      "use": "@vercel/node",
-      "config": {
-        "includeFiles": ["dist/**"]
-      }
+  "installCommand": "pnpm install --no-frozen-lockfile",
+  "buildCommand": "pnpm run build",
+  "functions": {
+    "api/index.js": {
+      "maxDuration": 30,
+      "includeFiles": "dist/**"
     }
-  ],
-  "routes": [
+  },
+  "rewrites": [
     {
-      "src": "/(.*)",
-      "dest": "/api/index.js"
+      "source": "/(.*)",
+      "destination": "/api/index.js"
     }
   ]
 }
