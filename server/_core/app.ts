@@ -5,31 +5,52 @@ import { registerOAuthRoutes } from "./oauth";
 import { registerStorageProxy } from "./storageProxy";
 import { appRouter } from "../routers";
 import { createContext } from "./context";
-import { serveStatic } from "./vite";
+import path from "path";
+import fs from "fs";
+import { fileURLToPath } from "url";
 
-export function createApp() {
-  const app = express();
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
-  // Configure body parser with larger size limit for file uploads
-  app.use(express.json({ limit: "50mb" }));
-  app.use(express.urlencoded({ limit: "50mb", extended: true }));
+const app = express();
 
-  registerStorageProxy(app);
-  registerOAuthRoutes(app);
+// Configure body parser with larger size limit for file uploads
+app.use(express.json({ limit: "50mb" }));
+app.use(express.urlencoded({ limit: "50mb", extended: true }));
 
-  // tRPC API
-  app.use(
-    "/api/trpc",
-    createExpressMiddleware({
-      router: appRouter,
-      createContext,
-    })
-  );
+registerStorageProxy(app);
+registerOAuthRoutes(app);
 
-  // Serve static files in production
-  serveStatic(app);
+// tRPC API
+app.use(
+  "/api/trpc",
+  createExpressMiddleware({
+    router: appRouter,
+    createContext,
+  })
+);
 
-  return app;
+// Serve static files in production
+// In Vercel serverless, __dirname points to the function directory
+// The dist/public files are included via includeFiles config
+const distPath = path.resolve(__dirname, "public");
+if (fs.existsSync(distPath)) {
+  app.use(express.static(distPath));
+  app.use("*", (_req, res) => {
+    res.sendFile(path.resolve(distPath, "index.html"));
+  });
+} else {
+  // Fallback: try relative to process.cwd()
+  const cwdDistPath = path.resolve(process.cwd(), "dist", "public");
+  if (fs.existsSync(cwdDistPath)) {
+    app.use(express.static(cwdDistPath));
+    app.use("*", (_req, res) => {
+      res.sendFile(path.resolve(cwdDistPath, "index.html"));
+    });
+  } else {
+    app.use("*", (_req, res) => {
+      res.status(404).send("Static files not found. Build the frontend first.");
+    });
+  }
 }
 
-export default createApp();
+export default app;
